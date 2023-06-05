@@ -37,6 +37,12 @@ function getRandomBase64 (byteLength) {
   }
 }
 
+// Expo SDK 48+
+let expoGetRandomValues
+if (global.expo && global.expo.modules && global.expo.modules.ExpoCrypto && global.expo.modules.ExpoCrypto.getRandomValues) {
+  expoGetRandomValues = global.expo.modules.ExpoCrypto.getRandomValues
+}
+
 /**
  * @param {Int8Array|Uint8Array|Int16Array|Uint16Array|Int32Array|Uint32Array|Uint8ClampedArray} array
  */
@@ -50,9 +56,9 @@ function getRandomValues (array) {
   }
 
   // Expo SDK 48+
-  if (global.expo && global.expo.modules && global.expo.modules.ExpoCrypto && global.expo.modules.ExpoCrypto.getRandomValues) {
+  if (expoGetRandomValues) {
     // ExpoCrypto.getRandomValues doesn't return the array
-    global.expo.modules.ExpoCrypto.getRandomValues(array)
+    expoGetRandomValues(array)
     return array
   }
 
